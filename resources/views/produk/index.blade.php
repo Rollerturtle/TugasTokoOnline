@@ -1,12 +1,40 @@
 @extends('layouts.app')
 
 @section('content')
+
+    <div class="position-fixed top-0 end-0 m-4">
+        <div class="container">
+            <div class="row justify-content-end">
+                <div class="col-md-12">
+                    @if(session('berhasil'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('berhasil') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    @if(session('perbarui'))
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            {{ session('perbarui') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    @if(session('hapus'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('hapus') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="row" style="margin: 20px;">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h2>Laravel Product Stock Management System</h2>
+                    <div class="card-header text-center">
+                        <h2>Sistem Manajemen Stok Toko Online</h2>
                     </div>
                     <div class="card-body">
                         <a href="{{ url('/produk/create') }}" class="btn btn-success btn-sm" title="Tambahkan Data Produk">
@@ -50,13 +78,9 @@
                                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                                         </button>
                                                     </a>
-                                                    <form method="POST" action="{{ url('/produk' . '/' . $item->id) }}" accept-charset="UTF-8" style="display: inline">
-                                                        {{ method_field('DELETE') }}
-                                                        {{ csrf_field() }}
-                                                        <button type="submit" class="btn btn-danger btn-sm" title="Hapus Data Produk" onclick="return confirm('Confirm delete?')">
-                                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                                        </button>
-                                                    </form>
+                                                    <button class="btn btn-danger btn-sm" title="Hapus Data Produk" onclick="showDeleteConfirmation('{{ url('/produk/' . $item->id) }}')">
+                                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                    </button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -69,6 +93,28 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteConfirmationModal" class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Konfirmasi Penghapusan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah Anda yakin ingin menghapus produk ini?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <form id="deleteForm" method="POST" action="" style="display: inline">
+                        {{ method_field('DELETE') }}
+                        {{ csrf_field() }}
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -87,6 +133,19 @@
                 }
             }
         }
+
+        function showDeleteConfirmation(url) {
+            var deleteForm = document.getElementById('deleteForm');
+            deleteForm.action = url;
+            $('#deleteConfirmationModal').modal('show');
+        }
+
+        $(document).ready(function(){
+            // Close flash message after 10 seconds
+            $(".alert").delay(10000).slideUp(200, function() {
+                $(this).alert('close');
+            });
+        });
     </script>
-    
+
 @endsection

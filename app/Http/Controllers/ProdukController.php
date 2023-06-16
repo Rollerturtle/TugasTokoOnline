@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Produk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProdukController extends Controller
 {
@@ -42,9 +43,27 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'nama_produk' => 'required|string|max:100',
+            'harga' => 'required|numeric|min:100',
+            'stok' => 'required|numeric|min:1',
+            'detail' => 'required|nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('produk/create')
+                ->withErrors($validator)
+                ->withInput()
+                ->with('hapus', 'Data yang dimasukkan tidak valid! Mohon masukkan sesuai ketentuan berikut: 
+                    Nama Produk: maksimal 100 karakter,
+                    Harga: minimal 100,
+                    Stok: minimal 1,
+                    Semua data di atas tidak boleh kosong!');
+        }
+
         $input = $request->all();
         Produk::create($input);
-        return redirect('produk')->with('flash_message', 'Produk Berhasil diTambahkan');
+        return redirect('produk')->with('berhasil', 'Produk Berhasil diTambahkan');
     }
 
     /**
@@ -70,10 +89,28 @@ class ProdukController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'nama_produk' => 'required|string|max:100',
+            'harga' => 'required|numeric|min:100',
+            'stok' => 'required|numeric|min:1',
+            'detail' => 'required|nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('produk/' . $id . '/edit')
+                ->withErrors($validator)
+                ->withInput()
+                ->with('hapus', 'Data yang dimasukkan tidak valid! Mohon masukkan sesuai ketentuan berikut: 
+                    Nama Produk: maksimal 100 karakter,
+                    Harga: minimal 100,
+                    Stok: minimal 1,
+                    Semua data di atas tidak boleh kosong!');
+        }
+
         $produk = Produk::find($id);
         $input = $request->all();
         $produk->update($input);
-        return redirect('produk')->with('flash_message', 'Data Produk Berhasil diPerbarui!');
+        return redirect('produk')->with('perbarui', 'Data Produk Berhasil diPerbarui!');
     }
 
     /**
@@ -82,7 +119,7 @@ class ProdukController extends Controller
     public function destroy($id)
     {
         Produk::destroy($id);
-        return redirect('produk')->with('flash_message', 'Produk Berhasil diHapus!');
+        return redirect('produk')->with('hapus', 'Produk Berhasil diHapus!');
     }
 
     public function stok(Request $request, $id)
@@ -92,7 +129,7 @@ class ProdukController extends Controller
             $produk->stok = $request->input('stok');
             $produk->save();
         }
-        return redirect()->back()->with('success', 'Stok produk berhasil diubah!');
+        return redirect()->back()->with('perbarui', 'Stok produk berhasil diubah!');
     }
 
 
