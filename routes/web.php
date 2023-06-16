@@ -18,4 +18,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::put('/produk/{id}/stok', [ProdukController::class, 'stok'])->name('produk.stok');
+Route::get('produk/available', [ProdukController::class, 'getAvailable'])->name('produk.available');
+Route::get('produk/unavailable', [ProdukController::class, 'getUnavailable'])->name('produk.unavailable');
+
+
+
 Route::resource("/produk", ProdukController::class);

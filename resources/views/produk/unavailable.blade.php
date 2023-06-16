@@ -31,16 +31,20 @@
                                         <td>{{ $item->stok }}</td>
   
                                         <td>
-                                            <a href="{{ url('/produk/' . $item->id . '/edit') }}" title="Edit Produk"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
+                                            <a href="{{ url('/produk/' . $item->id . '/stok') }}" title="Edit Stok"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
   
                                             </form>
                                         </td>
                                     </tr>
                                 @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="5">Tidak ada produk yang tersedia.</td>
+                                    </tr>
+                                @endif
                                 </tbody>
                             </table>
                         </div>
-  
                     </div>
                 </div>
             </div>

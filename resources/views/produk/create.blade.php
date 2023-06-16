@@ -7,13 +7,15 @@
        
       <form action="{{ url('produk') }}" method="post">
         {!! csrf_field() !!}
-        <label>Produk</label></br>
-        <input type="text" name="nama_produk" id="nama_produk" class="form-control"></br>
-        <label>Harga</label></br>
-        <input type="number" name="harga" id="harga" class="form-control"></br>
-        <label>Stok</label></br>
-        <input type="number" name="stok" id="stok" class="form-control"></br>
-        <input type="submit" value="Save" class="btn btn-success"></br>
+        <label>Produk</label><br>
+        <input type="text" name="nama_produk" id="nama_produk" class="form-control"><br>
+        <label>Harga</label><br>
+        <input type="number" name="harga" id="harga" class="form-control"><br>
+        <label>Stok</label><br>
+        <input type="number" name="stok" id="stok" class="form-control"><br>
+        <label>Detail</label><br>
+        <textarea name="detail" id="detail" class="form-control"></textarea><br>
+        <input type="submit" value="Save" class="btn btn-success"><br>
     </form>
     
   </div>

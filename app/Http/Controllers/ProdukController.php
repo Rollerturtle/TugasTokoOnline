@@ -16,16 +16,16 @@ class ProdukController extends Controller
         return view ('produk.index')->with('produk', $produk);
     }
 
-    public function available()
+    public function getAvailable()
     {
         $produk = Produk::where('stok', '>', 0)->get();
-        return view('produk.available')->with('produk', $produk);
+        return view('produk.index')->with('produk', $produk);
     }
     
     public function getUnavailable()
     {
-        //$produk2 = Produk::where('stok', '=', 0)->get();
-        //return view('produk.unavailable')->with('produk', $produk2);
+        $produk = Produk::where('stok', 0)->get();
+        return view('produk.index')->with('produk', $produk);
     }
 
 
@@ -53,7 +53,7 @@ class ProdukController extends Controller
     public function show($id)
     {
         $produk = Produk::find($id);
-        return view('produk.show', compact('produk'));
+        return view('produk.show')->with('produk', $produk);
     }
 
     /**
@@ -62,7 +62,7 @@ class ProdukController extends Controller
     public function edit($id)
     {
         $produk = Produk::find($id);
-        return view('produk.edit', compact('produk'));
+        return view('produk.edit')->with('produk', $produk);
     }
 
     /**
@@ -84,5 +84,17 @@ class ProdukController extends Controller
         Produk::destroy($id);
         return redirect('produk')->with('flash_message', 'Produk Berhasil diHapus!');
     }
+
+    public function stok(Request $request, $id)
+    {
+        $produk = Produk::find($id);
+        if ($request->input('stok') >= 0) {
+            $produk->stok = $request->input('stok');
+            $produk->save();
+        }
+        return redirect()->back()->with('success', 'Stok produk berhasil diubah!');
+    }
+
+
     
 }
